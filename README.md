@@ -20,7 +20,7 @@ Note:
 When asking for approval, make sure to prepare the following.
 - Part 1:
     - The code for the UDP module.
-    - Demonstration of the UDP module.
+    - Demonstrate that you can send an UDP message to the server and read the looped back message.
 - Part 2:
     - The code for the TCP module.
-    - Demonstration of the TCP module.
+    - Demonstrate that you can make the tcp server connect to your TCP server.
