@@ -8,7 +8,6 @@ This exercise is part of of a three-stage process:
 
 Note:
  - You are free to choose any language. Using the same language on the network exercises and the project is recommended, but not required. If you are still in the process of deciding, use this exercise as a language case study.
- - This is also a good time to make serious use of source control, as you will hopefully be able to use some of the code you write here as a part of the project.
  - Exactly how you do communication for the project is up to you, so if you want to venture out into the land of libraries you should make sure that the library satisfies all your requirements. You should also check the license.
 
 
