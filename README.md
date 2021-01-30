@@ -4,18 +4,20 @@ Exercise 3: Uplink Established
 This exercise is part of of a three-stage process:
  - This first exercise is to make you more familiar with using TCP and UDP for communication between processes running on different machines. Do not think too much about code quality here, as the main goal is familiarization with the protocols.
  - Exercise 4 will have you consider the things you have learned about these two protocols, and implement (or find) a network module that you can use in the project. The communication that is necessary for your design should reflect your choice of protocol. This is when you should start thinking more about code quality, because ...
- - Finally, you should be able to use this module as part of your project. Since predicting the future is notoriously difficult, you may find you need to change some functionality. But if the module has well-defined boundaries (a set of functions, communication channels, or others), you *should* be able to swap out the entire thing if necessary!
+ - Finally, you should be able to use this module as part of your project. Since predicting the future is notoriously difficult, you may find you need to change some functionality. 
 
+Since network programming requires both sending and receiving to work at the same time, it becomes quite difficult to get right when just starting out. This exercise comes with a pre-made network server, so that you can incrementally create one part at a time. On the lab, this networking server is run on the machine near the student assistants (so you do not need to do anything to set it up), and also prints out a full log of everything. If you are working from home, you may want to run a server yourself, and [instructions to do so are found in this document](./working-from-home.md).
 
-Note:
- - You are free to choose any language. Using the same language on the network exercises and the project is recommended, but not required. If you are still in the process of deciding, use this exercise as a language case study.
- - Exactly how you do communication for the project is up to you, so if you want to venture out into the land of libraries you should make sure that the library satisfies all your requirements. You should also check the license.
-- You need to be connected to the local network on the lab to contact the server
+You are free to choose any language. Using the same language on the network exercises and the project is recommended, but not required. If you are still in the process of deciding, use this exercise as a language case study.
+
+Exactly how you do communication for the project is up to you, so if you want to venture out into the land of libraries you should make sure that the library satisfies all your requirements, and knowing how TCP and UDP work will help you make an informed decision. You should also check the license.
 
 Practical tips:
- - Sharing a socket between threads should not be a problem, although reading from a socket in two threads will probably mean that only one of the threads get the message. If you are using blocking sockets, you could create a "receiving"-thread for each socket. Alternatively, you can use socket sets and the [`select()`](http://en.wikipedia.org/wiki/Select_%28Unix%29) function (or its equivalent).
+ - Sharing a socket between threads should not be a problem, although reading from a socket in two threads will probably mean that only one of the threads gets the message. If you are using blocking sockets, you could create a "receiving"-thread for each socket. 
+   - Alternatively, you can use socket sets and the [`select()`](http://en.wikipedia.org/wiki/Select_%28Unix%29) function (or its equivalent). Note that this is not the same "select" as in message passing - although its functionality is the same: it gives you the ability wait for activity on several connections simultaneously.
  - Be nice to the network: Put some amount of `sleep()` or equivalent in the loops that send messages. The network at the lab will be shut off if IT finds a DDOS-esque level of traffic. Yes, this has happened before. Several times.
  - You can find [some pseudocode here](resources.md) to get you started.
+
 
 
 Part 1: UDP
@@ -27,7 +29,7 @@ We have set up a server on the real time lab that you're going to communicate wi
 The server broadcasts it's own ip on port `30000`, listen for messages on this port to find the IP. You should write down the IP address as you will need it for again later in the exercise.
 
 ### Sending UDP packets:
-The server will respond to any message you send to it. Try sending a message to the server ip on port `20000 + n` where `n` is the number of the workspace you're sitting at. Listen to messages from the server and print them to a terminal to confirm that the messages are in fact beeing responded to.
+The server will respond to any message you send to it. Try sending a message to the server ip on port `20000 + n` where `n` is the number of the workspace you're sitting at. Listen to messages from the server and print them to a terminal to confirm that the messages are in fact being responded to.
 
 - The server will act the same way if you send a broadcast (`#.#.#.255` or `255.255.255.255`) instead of sending directly to the server.
   - If you use broadcast, the messages will loop back to you! The server prefixes its reply with "You said: ", so you can tell if you are getting a reply from the server or if you are just listening to yourself.
@@ -52,9 +54,9 @@ The server will read until it encounters the first `\0`, regardless. Strings in 
 
 
 ### Connecting:
-The IP address of the TCP server will be the same as the address the UDP server as spammed out on port 30000. Connect to the TCP server, using port `34933` for fixed-size messages, or port `33546` for 0-terminated messages. It will reply back with a welcome-message when you connect. 
+The IP address of the TCP server will be the same as the address the UDP server as spammed out on port 30000. Connect to the TCP server, using port `34933` for fixed-size messages, or port `33546` for 0-terminated messages. 
 
-The server will then echo anything you say to it back to you (as long as your message ends with `'\0'`). Try sending and receiving a few messages.
+The server will send you a welcome-message when you connect, and after that it will echo anything you say back to you (as long as your message ends with `'\0'`). Try sending and receiving a few messages.
 
 ### Accepting connections:
 Tell the server to connect back to you, by sending a message of the form `Connect to: #.#.#.#:#\0` (IP of your machine and port you are listening to). You can find your own address by running `ifconfig` in the terminal, the first three bytes should be the same as the server's IP.
